@@ -1,0 +1,29 @@
+y
+Games won in a 14 game season
+
+x1
+Rushing yards
+
+x2
+Passing yards
+
+x3
+Punting average (yards/punt)
+
+x4
+Field Goal Percentage (FGs made/FGs attempted)
+
+x5
+Turnover differential (turnovers acquired - turnovers lost)
+
+x6
+Penalty yards
+
+x7
+Percent rushing (rushing plays/total plays)
+
+x8
+Opponents' rushing yards
+
+x9
+Opponents' passing yards

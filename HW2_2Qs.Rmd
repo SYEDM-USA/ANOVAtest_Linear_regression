@@ -1,0 +1,154 @@
+---
+title: "HW2"
+author: "Brad, Syed, Jacob, Katie"
+date: "10/16/2021"
+output: html_document
+---
+
+HW2 for Bradley Haren, Jacob Haussler, Syed Mohammed Abubaker, Katie Ho
+
+```{r}
+df = read.csv("C:/Users/Brad/Desktop/Stat 4020/NFL.csv")
+```
+
+1. Fit a multiple linear regression model relating the number of games won to the team ’ s passing yardage (x2), the percentage of rushing plays (x7), and the opponents’ yards rushing (x8). Write the equation of the fitted regression line.
+
+```{r}
+mlr = lm(y ~ x2 + x7 + x8, data=df)
+summary(mlr)
+```
+
+Based on the summary, the fitted regression line is:
+
+y_hat = -1.808372 + 0.003598*x2 + 0.193960*x7 - 0.004816*x8
+or
+Number-of-games-won_hat = -1.808372 + 0.003598*pass-yds + 0.193960*pct-rush - 0.004816*opp-rush-yds
+
+2. Construct the analysis-of-variance table and test for significance of regression. Write the null hypothesis, alternate hypothesis, test statistic, p-value and conclusion.
+
+```{r}
+anova(mlr)
+```
+
+H0: β1 = β2 = β3 = 0
+HA: At least one of β1, β2, β3 is NOT 0
+
+(β1, β2, β3 correspond to x2, x7, x8 respectively)
+
+Test Statistic: 29.44
+p-value: 3.273e-08
+
+Since p < 0.05, we reject the null hypothesis. There is enough evidence to conclude that at least one of the variables in the model has a linear association to the response. 
+
+3. Calculate t statistics for testing the hypotheses 
+(a) H0 : β2 = 0 vs.  H1 : β2 != 0  
+(b) H0 : β7 = 0 vs.  H1 : β7 != 0  
+(c) H0 : β8 = 0 vs.  H1 : β8 != 0 
+What conclusions can you draw about the roles the variables x2, x7, and x8 play in the model?
+
+Looking again at the summary,
+```{r}
+summary(mlr)
+```
+
+The test statistics for the hypotheses are:
+a) 5.177
+b) 2.198
+c) -3.771
+
+To view the significance of each variable, we will look at the p-values corresponding to these t-values. We get 2.66e-05, 0.037815, and 0.000938 respectively. Since all are less than 0.05, this shows that each of these are significant. y (number of games won) is significantly related to each x2, x7, and x8.
+
+4. Calculate R2 and Adjusted R2 for this model.
+
+Looking again at the summary,
+
+We see that the R-sq value is 0.7863, and the adjusted R-sq is 0.7596.
+
+5. Using the partial F test, determine the contribution of x7 to the model. How is this partial F statistic related to the t test for β7 calculated in part c above?
+
+```{r}
+library(car)
+mlr1 <- lm(y ~ x7, data=df)
+a = Anova(mlr, type = 2)
+a
+```
+Based on the result we got 
+Partial F-value x7 : 4.8324 
+Partial F test for x7 here β7 is significant hence full model is significant. As x7 increases, y_hat increases at given level of significance. However, it carries less significance than x2 and x8.
+Compared to the question 3, where the t stat for x7 was 2.198, we can see that the partial F stat for x7 is just 2.198 squared.
+
+Based on the result and the table we got from above code, because p value for x7 is less than alpha value hence it is significant at given level of significance
+
+```{r}
+chemical = read.csv("C:/Users/Brad/Desktop/Stat 4020/chemical.csv")
+```
+
+1. Fit a multiple regression model relating CO 2 product ( y ) to total solvent ( x 6 ) and hydrogen consumption ( x 7 ). Write the equation of the fitted regression line.
+
+```{r}
+mlr2 = lm(y ~ x6 + x7, data=chemical)
+summary(mlr2)
+```
+Based on the summary, the fitted regression line is:
+
+y_hat = 2.526460 + 0.018522*x6 + 2.185753*x7
+or
+CO2_hat = 2.526460 + 0.018522*total solvent + 2.185753*hydrogen consumption
+
+
+2. Test for significance of regression.  Write the null hypothesis, alternate hypothesis, test statistic, p-value and conclusion.
+
+Based on the mlr2 model summary: 
+
+-  H0: β1=β2=···=βk=0, H1: βj !=0 for at least one j. 
+
+- The F-statistic is 27.95 and the p-value is 5.391e-07.
+
+- Since the p-value is less than 0.05 we reject the null hypothesis and is reasonable to believe that at least one of the regression coefficients is non-zero. 
+
+
+3. Calculate R2 and Adjusted R2 for this model.
+
+Based on the mlr2 model summary:
+
+- The R2 value is 0.6996 and the Adjusted R2 value is 0.6746
+
+4. Using t tests determine the contribution of x 6 and x 7 to the model.
+
+Based on the mlr2 model summary: 
+
+- For x6 H0: β1=0, H1: β1 !=0,  we see that the t test is 6.742 and p-value is 5.66e-07, for this we can also reject the null hypothesis. 
+
+- For x7 H0: β2=0, H1: β2 !=0, we see that the t test is 2.247 and p-value is 0.0341, for this if we are going by 0.05 significance than we can also reject the null hypothesis although it is not as strong of an association as x6. 
+
+5. Construct 95% CIs on β1 and β2.
+
+```{r}
+confint(mlr2, level = 0.95)
+```
+
+- The 95% confidence interval for β0 is (-4.92432697,9.97724714), β1 is (0.01285196,0.02419204) and β2 is (0.17820756,4.19329833). 
+
+6. Refit the model using only x 6 as the regressor. Test for significance of regression and calculate R2 and Adjusted R2. Discuss your findings. Based on these statistics, are you satisfied with this model?
+
+```{r}
+mlr3 = lm(y ~ x6, data=chemical)
+summary(mlr3)
+```
+
+- The t-value is 6.616 and p-value is 6.24e-07 for x6, which means it is significant. 
+
+- R2 is 0.6365 and Adjusted R2 is 0.6219. 
+
+- We note that the Adjusted R2 value has decreased which implies it was not a good idea to remove the x7 variable. So, we are not satisfied with this model because of that.  
+
+7. Compare the values of MSE obtained for the two models you have fit (parts 1 and 6). How did the MSE change when you removed x 7 from the model? Does this tell you anything important about the contribution of x 7 to the model?
+
+```{r}
+a2 = anova(mlr2)
+a3 = anova(mlr3)
+a2
+a3
+```
+
+Based on these two tables, we can see that the MSE went from 98.5 to 114.4 when we removed x7. So, our MSE actually went up when we removed x7. This would lead me to believe that x7 plays an important part in this model, and helps to reduce error when compared to a model with x6 alone.
